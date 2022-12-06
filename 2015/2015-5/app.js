@@ -1,4 +1,4 @@
-import { fetchLines } from "../lib/forth.js";
+import { fetchLines } from "../../lib/forth.js";
 
 const vowels = "aeiou";
 const exceptions = ["ab", "cd", "pq", "xy"];

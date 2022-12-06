@@ -1,4 +1,4 @@
-import { fetchLines } from "../lib/forth.js";
+import { fetchLines } from "../../lib/forth.js";
 
 (async () => {
   const lines = await fetchLines();
@@ -83,7 +83,7 @@ function executeProcedures(stacks, procedures, keepOrder) {
 
 /**
  * Concat les caisses du dessus de chaque pile
- * @param {string[][]} stacks 
+ * @param {string[][]} stacks
  */
 function getCode(stacks) {
   return stacks.map((stack) => stack.pop()).join("");

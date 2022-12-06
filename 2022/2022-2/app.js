@@ -1,4 +1,4 @@
-import { fetchLines } from "../lib/forth.js";
+import { fetchLines } from "../../lib/forth.js";
 
 const SHAPES = {
   ROCK: "ROCK",

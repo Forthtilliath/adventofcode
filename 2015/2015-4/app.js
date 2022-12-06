@@ -1,4 +1,4 @@
-import { fetchData } from "../lib/forth.js";
+import { fetchData } from "../../lib/forth.js";
 
 (async () => {
   const data = await fetchData();

@@ -1,4 +1,4 @@
-import { chunkArray, fetchLines } from "../lib/forth.js";
+import { chunkArray, fetchLines } from "../../lib/forth.js";
 
 function getLetterFrom(i) {
   return String.fromCharCode(i);

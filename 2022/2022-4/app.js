@@ -1,4 +1,4 @@
-import { fetchLines } from "../lib/forth.js";
+import { fetchLines } from "../../lib/forth.js";
 
 (async () => {
   const lines = await fetchLines();
@@ -31,4 +31,3 @@ function isFullContained([minA, maxA], [minB, maxB]) {
 function isOverlapping([minA, maxA], [minB, maxB]) {
   return (minA <= minB && maxA >= minB) || (minB <= minA && maxB >= minA);
 }
-
