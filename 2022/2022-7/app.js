@@ -1,7 +1,8 @@
 import { fetchLines } from "../../lib/forth.js";
 
-// https://regex101.com/r/VcK8NK/1
-const REGEX = /((?<command>^\$) )?(?<first>\w*)( (?<second>[\w.\/]*))?/;
+// https://regex101.com/r/4iYZuP/1
+const REGEX =
+  /(^\$ )(?<command>\w*)( (?<arg>[\w.\/]*))?|(^dir (?<dirname>\w*))|(?<size>\d*) (?<filename>[\w.]*)/;
 
 (async () => {
   const lines = await fetchLines();
@@ -46,10 +47,10 @@ function generateTree(commands) {
   let currentTree;
   const historyTree = [];
 
-  commands.forEach((commandLine) => {
-    if (isCommand(commandLine)) {
-      if (commandLine.first === "cd") {
-        switch (commandLine.second) {
+  commands.forEach((line) => {
+    if (line.command) {
+      if (line.command === "cd") {
+        switch (line.arg) {
           case "/":
             historyTree.length = 0;
             currentTree = tree;
@@ -59,19 +60,19 @@ function generateTree(commands) {
             break;
           default:
             historyTree.push(currentTree);
-            currentTree = findDir(currentTree, commandLine.second);
+            currentTree = findDir(currentTree, line.arg);
         }
-      } else if (commandLine.first === "ls") {
+      } else if (line.command === "ls") {
         // next lines list the files and dir in the current path
       }
     } else {
-      if (isLsDir(commandLine)) {
-        const dir = { name: commandLine.second, content: [] };
+      if (line.dirname) {
+        const dir = { name: line.dirname, content: [] };
         addFile(currentTree, dir);
       } else {
         const file = {
-          name: commandLine.second,
-          size: Number(commandLine.first),
+          name: line.filename,
+          size: Number(line.size),
         };
         addFile(currentTree, file);
       }
@@ -82,11 +83,11 @@ function generateTree(commands) {
 }
 
 function isCommand(line) {
-  return line.command === "$";
+  return line.command !== undefined;
 }
 
-function isLsDir(line) {
-  return line.first === "dir";
+function isDir(line) {
+  return line.dirname !== undefined;
 }
 
 function addFile(tree, file) {
