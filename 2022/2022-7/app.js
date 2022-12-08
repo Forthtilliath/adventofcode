@@ -81,14 +81,6 @@ function generateTree(commands) {
   return tree;
 }
 
-function isCommand(line) {
-  return line.command !== undefined;
-}
-
-function isDir(line) {
-  return line.dirname !== undefined;
-}
-
 function addFile(tree, file) {
   tree.content.push(file);
 }
