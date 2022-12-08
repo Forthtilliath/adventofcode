@@ -2,7 +2,6 @@ import { fetchLines } from "../../lib/forth.js";
 
 (async () => {
   const lines = await fetchLines();
-  console.log(lines);
 
   console.log("Part 1", part1(lines));
   console.log("Part 2", part2(lines));

@@ -31,7 +31,6 @@ function part2(sizes) {
   };
   const free_space = SIZES.TOTAL - sizes["/"];
   const needed_space = SIZES.NEEDED - free_space;
-  console.log(needed_space);
 
   return Math.min(
     ...Object.values(sizes).filter((size) => size >= needed_space)
