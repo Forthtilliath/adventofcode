@@ -1,4 +1,4 @@
-import { fetchLines } from "../../lib/forth.js";
+import { fetchLines, multiply } from "../../lib/forth.js";
 
 (async () => {
   const lines = await fetchLines();
@@ -65,8 +65,4 @@ function getAllTreesToEdge(arr, x, y) {
     .split("x");
   top = top.split("").reverse().join("");
   return [left, right, top, bot];
-}
-
-function multiply(arr) {
-  return arr.reduce((acc, n) => acc * n, 1);
 }
