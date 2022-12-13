@@ -8,15 +8,16 @@ async function init() {
   console.log("Part 1", checkPackets(lines));
 }
 
-function checkPackets(lines) {
-  const linesFiltered = lines.filter((item) => item.length);
-  const pairs = chunkArray(linesFiltered, linesFiltered.length / 2);
+function checkPackets(lines, ignoreBlankLines = true) {
+  lines = lines.filter((item) => item.length);
+  const pairs = chunkArray(lines, lines.length / 2);
   let sumIndex = 0;
 
   const tabsRightOrder = pairs.filter((pair, i) => {
     const [tab1, tab2] = pair.map(JSON.parse);
     const a = compareArrays(tab1, tab2);
-    if (a) sumIndex += i + 1;
+    console.log(tab1, tab2,a)
+    if (a === 1) sumIndex += i + 1;
     return a;
   });
 
@@ -31,20 +32,20 @@ function compareArrays(a, b) {
 
   for (let i = 0; i < Math.max(arr1.length, arr2.length); i++) {
     // Si un tableau terminé
-    if (arr1[i] === undefined) return true;
-    if (arr2[i] === undefined) return false;
+    if (arr1[i] === undefined) return 1;
+    if (arr2[i] === undefined) return -1;
 
     // Si y'a un tableau => recursivité
     if (Array.isArray(arr1[i]) || Array.isArray(arr2[i])) {
       const res = compareArrays(arr1[i], arr2[i]);
-      if (res === null) continue;
-      return res;
+      if (res === 0) continue;
+      return res ? 1 : -1;
     }
 
     if (arr1[i] === arr2[i]) continue;
 
-    return arr1[i] < arr2[i];
+    return arr1[i] < arr2[i] ? 1 : -1;
   }
 
-  return null;
+  return 0;
 }
