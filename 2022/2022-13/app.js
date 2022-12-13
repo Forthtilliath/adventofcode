@@ -4,48 +4,62 @@ init();
 
 async function init() {
   const lines = await fetchLines();
+  const filteredLines = lines.filter((item) => item.length);
 
-  console.log("Part 1", checkPackets(lines));
+  console.log("Part 1", part1(filteredLines));
+  console.log("Part 2", part2(filteredLines));
 }
 
-function checkPackets(lines, ignoreBlankLines = true) {
-  lines = lines.filter((item) => item.length);
+function part1(lines) {
   const pairs = chunkArray(lines, lines.length / 2);
-  let sumIndex = 0;
 
-  const tabsRightOrder = pairs.filter((pair, i) => {
-    const [tab1, tab2] = pair.map(JSON.parse);
-    const a = compareArrays(tab1, tab2);
-    console.log(tab1, tab2,a)
-    if (a === 1) sumIndex += i + 1;
-    return a;
-  });
-
-  console.log(tabsRightOrder);
-
-  return sumIndex;
+  return pairs.reduce((n, pair, i) => (isRightOrder(pair) ? n + i + 1 : n), 0);
 }
 
-function compareArrays(a, b) {
-  const arr1 = convertToArray(a);
-  const arr2 = convertToArray(b);
+function part2(lines) {
+  lines.sort((a, b) => compareArrays(JSON.parse(a), JSON.parse(b)));
+  
+  const firstDivider = findDividerIndex(lines, "[[2]]") + 1;
+  const secondDivider = findDividerIndex(lines, "[[6]]") + 1;
 
-  for (let i = 0; i < Math.max(arr1.length, arr2.length); i++) {
+  return firstDivider * secondDivider;
+}
+
+function isRightOrder(pair) {
+  const [tab1, tab2] = pair.map(JSON.parse);
+  return compareArrays(tab1, tab2) === -1;
+}
+
+/**
+ *
+ * @param {number|array} a First array to compare
+ * @param {number|array} b Second array to compare
+ * @returns 0 if the array are equals, -1 if a < b, else 1 if b > a
+ */
+function compareArrays(a, b) {
+  a = convertToArray(a);
+  b = convertToArray(b);
+
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
     // Si un tableau terminé
-    if (arr1[i] === undefined) return 1;
-    if (arr2[i] === undefined) return -1;
+    if (a[i] === undefined) return -1;
+    if (b[i] === undefined) return 1;
 
     // Si y'a un tableau => recursivité
-    if (Array.isArray(arr1[i]) || Array.isArray(arr2[i])) {
-      const res = compareArrays(arr1[i], arr2[i]);
+    if (Array.isArray(a[i]) || Array.isArray(b[i])) {
+      const res = compareArrays(a[i], b[i]);
       if (res === 0) continue;
-      return res ? 1 : -1;
+      return res;
     }
 
-    if (arr1[i] === arr2[i]) continue;
+    if (a[i] === b[i]) continue;
 
-    return arr1[i] < arr2[i] ? 1 : -1;
+    return a[i] < b[i] ? -1 : 1;
   }
 
   return 0;
+}
+
+function findDividerIndex(lines, divider) {
+  return lines.findIndex((line) => line === divider);
 }
